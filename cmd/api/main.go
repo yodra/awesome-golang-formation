@@ -1,8 +1,8 @@
 package main
 
 import (
-	"awesome-golang-formation/server/handler/hello"
 	"github.com/gorilla/mux"
+	"github.com/yodra/awesome-golang-formation/server/handler/hello"
 	"log"
 	"net/http"
 )

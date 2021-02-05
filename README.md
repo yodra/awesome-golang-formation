@@ -9,3 +9,5 @@ make build
 ```
 make run
 ``` 
+
+- Write down how to install dependencies, something like `go get blablabla....`
