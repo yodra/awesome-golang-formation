@@ -9,3 +9,11 @@ type Movie struct {
 type MovieRepo interface {
 	Save(movie Movie) error
 }
+
+func FormatToDomain(request CreateMovieRequest) Movie {
+	return Movie{
+		name:   request.Name,
+		year:   request.Year,
+		author: request.Author,
+	}
+}

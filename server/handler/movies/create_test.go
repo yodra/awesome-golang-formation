@@ -10,12 +10,6 @@ import (
 	"testing"
 )
 
-type CreateMovieRequest struct {
-	name   string
-	year   string
-	author string
-}
-
 func TestCreateHandler(t *testing.T) {
 	endpoint := "/movies"
 	createHandler := CreateHandler(&MockRepository{})
@@ -23,28 +17,30 @@ func TestCreateHandler(t *testing.T) {
 	r := mux.NewRouter()
 	r.HandleFunc(endpoint, createHandler).Methods(http.MethodPost)
 
-	createMovieRequest := CreateMovieRequest{
-		name:   "Peliculon",
-		year:   "tueni tueni",
-		author: "yo mismo",
-	}
+	t.Run("should be return StatusOk", func(t *testing.T) {
+		createMovieRequest := server.CreateMovieRequest{
+			Name:   "Peliculon",
+			Year:   "tueni tueni",
+			Author: "yo mismo",
+		}
 
-	bodyRequest, err := json.Marshal(createMovieRequest)
-	if err != nil {
-		t.Fatalf("error marshal request %v", err)
-	}
+		bodyRequest, err := json.Marshal(createMovieRequest)
+		if err != nil {
+			t.Fatalf("error marshal request %v", err)
+		}
 
-	req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(bodyRequest))
-	if err != nil {
-		t.Fatal(err)
-	}
+		req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(bodyRequest))
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	recorder := httptest.NewRecorder()
-	r.ServeHTTP(recorder, req)
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, req)
 
-	if status := recorder.Code; status != http.StatusOK {
-		t.Errorf("se ha roto pollito got: %v\n want: %v", status, http.StatusOK)
-	}
+		if status := recorder.Code; status != http.StatusOK {
+			t.Errorf("se ha roto pollito got: %v\n want: %v", status, http.StatusOK)
+		}
+	})
 }
 
 type MockRepository struct{}
