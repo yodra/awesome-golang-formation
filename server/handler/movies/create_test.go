@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/stretchr/testify/require"
 	"github.com/yodra/awesome-golang-formation/server"
 	"net/http"
 	"net/http/httptest"
@@ -19,7 +18,7 @@ type CreateMovieRequest struct {
 
 func TestCreateHandler(t *testing.T) {
 	endpoint := "/movies"
-	createHandler := CreateHandler(&MockRepo{})
+	createHandler := CreateHandler(&MockRepository{})
 
 	r := mux.NewRouter()
 	r.HandleFunc(endpoint, createHandler).Methods(http.MethodPost)
@@ -31,20 +30,25 @@ func TestCreateHandler(t *testing.T) {
 	}
 
 	bodyRequest, err := json.Marshal(createMovieRequest)
-	require.NoError(t, err)
+	if err != nil {
+		t.Fatalf("error marshal request %v", err)
+	}
+
 	req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(bodyRequest))
-	require.NoError(t, err)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	recorder := httptest.NewRecorder()
 	r.ServeHTTP(recorder, req)
 
 	if status := recorder.Code; status != http.StatusOK {
-		t.Errorf("se ha roto pollito got: %v want: %v", status, http.StatusOK)
+		t.Errorf("se ha roto pollito got: %v\n want: %v", status, http.StatusOK)
 	}
 }
 
-type MockRepo struct{}
+type MockRepository struct{}
 
-func (repo *MockRepo) Save(_ server.Movie) error {
+func (repo *MockRepository) Save(_ server.Movie) error {
 	return nil
 }
