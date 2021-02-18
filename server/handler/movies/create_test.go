@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"github.com/yodra/awesome-golang-formation/server"
+	"github.com/yodra/awesome-golang-formation/server/storage/storagemocks"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,7 +13,7 @@ import (
 
 func TestCreateHandler(t *testing.T) {
 	endpoint := "/movies"
-	createHandler := CreateHandler(&MockRepository{})
+	createHandler := CreateHandler(&storagemocks.MockRepository{})
 
 	r := mux.NewRouter()
 	r.HandleFunc(endpoint, createHandler).Methods(http.MethodPost)
@@ -61,8 +62,3 @@ func TestCreateHandler(t *testing.T) {
 	})
 }
 
-type MockRepository struct{}
-
-func (repo *MockRepository) Save(_ server.Movie) error {
-	return nil
-}
