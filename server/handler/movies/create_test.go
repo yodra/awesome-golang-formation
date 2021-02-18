@@ -41,6 +41,24 @@ func TestCreateHandler(t *testing.T) {
 			t.Errorf("se ha roto pollito got: %v\n want: %v", status, http.StatusOK)
 		}
 	})
+	t.Run("should be return StatusBadRequest when the request it is wrong", func(t *testing.T) {
+		createMovieRequest := `{
+			"Name": "Peliculon",
+			"anio": "tueni",
+		}`
+
+		req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer([]byte(createMovieRequest)))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		recorder := httptest.NewRecorder()
+		r.ServeHTTP(recorder, req)
+
+		if status := recorder.Code; status != http.StatusBadRequest {
+			t.Errorf("error got: %v\n want: %v", status, http.StatusBadRequest)
+		}
+	})
 }
 
 type MockRepository struct{}
