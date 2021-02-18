@@ -1,6 +1,7 @@
 package movies
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -13,6 +14,8 @@ type HttpHandler func(w http.ResponseWriter, _ *http.Request)
 
 func CreateHandler(repository server.MovieRepo) HttpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithCancel(context.Background())
+		defer cancel()
 		reqBody, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			log.Printf("could not read body from request: %v", err)
@@ -29,7 +32,7 @@ func CreateHandler(repository server.MovieRepo) HttpHandler {
 		}
 
 		movie := server.FormatToDomain(movieRequest)
-		err = repository.Save(movie)
+		err = repository.Save(ctx, movie)
 		if err != nil {
 			log.Printf("could not save the movie: %v", err)
 			http.Error(w, server.WriteErrorJSON(http.StatusExpectationFailed, err.Error()), http.StatusExpectationFailed)

@@ -1,5 +1,7 @@
 package server
 
+import "context"
+
 type Movie struct {
 	name   string
 	year   string
@@ -7,7 +9,7 @@ type Movie struct {
 }
 
 type MovieRepo interface {
-	Save(movie Movie) error
+	Save(ctx context.Context, movie Movie) error
 }
 
 func FormatToDomain(request CreateMovieRequest) Movie {
