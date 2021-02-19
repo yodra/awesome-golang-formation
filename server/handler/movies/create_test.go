@@ -27,7 +27,7 @@ func TestCreateHandler(t *testing.T) {
 
 		bodyRequest, err := json.Marshal(createMovieRequest)
 		if err != nil {
-			t.Fatalf("error marshal request %v", err)
+			t.Fatalf("error on marshal request %v", err)
 		}
 
 		req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(bodyRequest))
@@ -61,4 +61,3 @@ func TestCreateHandler(t *testing.T) {
 		}
 	})
 }
-
