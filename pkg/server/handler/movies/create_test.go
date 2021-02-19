@@ -3,6 +3,7 @@ package movies
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/stretchr/testify/require"
 	"github.com/yodra/awesome-golang-formation/pkg/server/handler"
 	"net/http"
 	"net/http/httptest"
@@ -31,14 +32,11 @@ func TestCreateHandler(t *testing.T) {
 		}
 
 		bodyRequest, err := json.Marshal(createMovieRequest)
-		if err != nil {
-			t.Fatalf("error on marshal request %v", err)
-		}
+		require.NoError(t, err)
+
 
 		req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(bodyRequest))
-		if err != nil {
-			t.Fatal(err)
-		}
+		require.NoError(t, err)
 
 		recorder := httptest.NewRecorder()
 		r.ServeHTTP(recorder, req)
@@ -55,9 +53,7 @@ func TestCreateHandler(t *testing.T) {
 		}`
 
 		req, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer([]byte(createMovieRequest)))
-		if err != nil {
-			t.Fatal(err)
-		}
+		require.NoError(t, err)
 
 		recorder := httptest.NewRecorder()
 		r.ServeHTTP(recorder, req)

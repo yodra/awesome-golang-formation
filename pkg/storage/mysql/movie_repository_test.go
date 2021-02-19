@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/yodra/awesome-golang-formation/pkg/domain"
 	"testing"
 )
@@ -11,14 +13,10 @@ import (
 func Test_Save_RepositoryError(t *testing.T) {
 	name, year, author := "Movie name", "2002", "Movie author"
 	movie, err := domain.NewMovie(name, year, author)
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	db, sqlMock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 	sqlMock.ExpectExec(
 		"INSERT INTO movies (name, year, author) VALUES (?, ?, ?)").
 		WithArgs(name, year, author).
@@ -28,19 +26,17 @@ func Test_Save_RepositoryError(t *testing.T) {
 
 	err = repo.Save(context.Background(), movie)
 
+	assert.NoError(t, sqlMock.ExpectationsWereMet())
+	assert.Error(t, err)
 }
 
 func Test_Save_Succeed(t *testing.T) {
 	name, year, author := "Movie name", "2002", "Movie author"
 	movie, err := domain.NewMovie(name, year, author)
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 
 	db, sqlMock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
-	if err != nil {
-		t.Fatal(err)
-	}
+	require.NoError(t, err)
 	sqlMock.ExpectExec(
 		"INSERT INTO movies (name, year, author) VALUES (?, ?, ?)").
 		WithArgs(name, year, author).
@@ -50,4 +46,6 @@ func Test_Save_Succeed(t *testing.T) {
 
 	err = repo.Save(context.Background(), movie)
 
+	assert.NoError(t, sqlMock.ExpectationsWereMet())
+	assert.NoError(t, err)
 }
