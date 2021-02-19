@@ -17,7 +17,7 @@ import (
 func TestCreateHandler(t *testing.T) {
 	endpoint := "/movies"
 	movieRepository := new(storagemocks.MovieRepository)
-	movieRepository.On("Save", mock.Anything, mock.AnythingOfType("server.Movie")).Return(nil)
+	movieRepository.On("Save", mock.Anything, mock.AnythingOfType("domain.Movie")).Return(nil)
 
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
