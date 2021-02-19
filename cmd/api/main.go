@@ -16,7 +16,7 @@ import (
 const (
 	dbUser = "leanmind"
 	dbPass = "leanmind"
-	dbHost = "localhost"
+	dbHost = "127.0.0.1"
 	dbPort = "3306"
 	dbName = "leanmind"
 )
