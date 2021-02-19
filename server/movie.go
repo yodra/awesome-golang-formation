@@ -15,6 +15,7 @@ type MovieRepo interface {
 	Save(ctx context.Context, movie Movie) error
 }
 
+// todo add some custom data to specify the error? Something like "the filed name can..."
 var ErrEmptyField = errors.New("the field can not be empty")
 
 func NewMovie(name, year, author string) (Movie, error) {
@@ -41,7 +42,7 @@ type MovieName struct {
 }
 
 func NewMovieName(name string) (MovieName, error) {
-	if name != "" {
+	if name == "" {
 		return MovieName{}, ErrEmptyField
 	}
 	return MovieName{name}, nil
@@ -52,7 +53,7 @@ type MovieYear struct {
 }
 
 func NewMovieYear(year string) (MovieYear, error) {
-	if year != "" {
+	if year == "" {
 		return MovieYear{}, ErrEmptyField
 	}
 	return MovieYear{year}, nil
@@ -63,7 +64,7 @@ type MovieAuthor struct {
 }
 
 func NewMovieAuthor(author string) (MovieAuthor, error) {
-	if author != "" {
+	if author == "" {
 		return MovieAuthor{}, ErrEmptyField
 	}
 	return MovieAuthor{author}, nil
