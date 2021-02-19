@@ -18,3 +18,4 @@ make run
 
 - [Gin](https://github.com/gin-gonic/gin)
 - [Mockery](https://github.com/vektra/mockery/)
+- [Testify](https://https://github.com/stretchr/testify/)
