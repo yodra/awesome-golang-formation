@@ -1,4 +1,4 @@
-package server
+package domain
 
 import (
 	"context"
@@ -11,9 +11,11 @@ type Movie struct {
 	author MovieAuthor
 }
 
-type MovieRepo interface {
+type MovieRepository interface {
 	Save(ctx context.Context, movie Movie) error
 }
+
+//go:generate mockery --case=snake --outpkg=storagemocks --output=storage/storagemocks --name=MovieRepository
 
 func (m *Movie) Name() string {
 	return m.name.value

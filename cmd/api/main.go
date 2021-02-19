@@ -3,17 +3,16 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"net/http"
-
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
-	"github.com/yodra/awesome-golang-formation/server/handler/hello"
-	"github.com/yodra/awesome-golang-formation/server/handler/movies"
-	"github.com/yodra/awesome-golang-formation/server/storage/mysql"
+	"github.com/yodra/awesome-golang-formation/pkg/server"
+	"github.com/yodra/awesome-golang-formation/pkg/storage/mysql"
+	"log"
 )
 
 const (
+	host = "localhost"
+	port = 8080
+
 	dbUser = "leanmind"
 	dbPass = "leanmind"
 	dbHost = "127.0.0.1"
@@ -22,9 +21,6 @@ const (
 )
 
 func main() {
-
-	routerParent := mux.NewRouter().StrictSlash(true)
-
 	mysqlUri := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", dbUser, dbPass, dbHost, dbPort, dbName)
 	db, err := sql.Open("mysql", mysqlUri)
 	if err != nil {
@@ -32,9 +28,6 @@ func main() {
 	}
 	repo := mysql.NewMovieRepository(db)
 
-	routerParent.HandleFunc("/hello", hello.Handler).Methods(http.MethodGet)
-	routerParent.HandleFunc("/movies", movies.CreateHandler(repo)).Methods(http.MethodPost)
-
-	fmt.Println("App is up and running on localhost:8080 🎉")
-	log.Fatal(http.ListenAndServe(":8080", routerParent))
+	srv := server.New(host, port, repo)
+	srv.Run()
 }

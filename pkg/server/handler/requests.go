@@ -1,4 +1,4 @@
-package server
+package handler
 
 type CreateMovieRequest struct {
 	Name   string

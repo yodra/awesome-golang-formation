@@ -3,23 +3,28 @@ package movies
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/yodra/awesome-golang-formation/server"
-	"github.com/yodra/awesome-golang-formation/server/storage/storagemocks"
+	"github.com/yodra/awesome-golang-formation/pkg/server/handler"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/yodra/awesome-golang-formation/pkg/storage/storagemocks"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/mock"
 )
 
 func TestCreateHandler(t *testing.T) {
 	endpoint := "/movies"
-	createHandler := CreateHandler(&storagemocks.MockRepository{})
+	movieRepository := new(storagemocks.MovieRepository)
+	movieRepository.On("Save", mock.Anything, mock.AnythingOfType("server.Movie")).Return(nil)
 
-	r := mux.NewRouter()
-	r.HandleFunc(endpoint, createHandler).Methods(http.MethodPost)
+	gin.SetMode(gin.TestMode)
+	r := gin.New()
+	r.POST(endpoint, CreateHandler(movieRepository))
 
-	t.Run("should be return StatusOk", func(t *testing.T) {
-		createMovieRequest := server.CreateMovieRequest{
+	t.Run("should be return StatusCreated", func(t *testing.T) {
+		createMovieRequest := handler.CreateMovieRequest{
 			Name:   "Peliculon",
 			Year:   "tueni tueni",
 			Author: "yo mismo",
@@ -38,10 +43,11 @@ func TestCreateHandler(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		r.ServeHTTP(recorder, req)
 
-		if status := recorder.Code; status != http.StatusOK {
-			t.Errorf("se ha roto pollito got: %v\n want: %v", status, http.StatusOK)
+		if status := recorder.Code; status != http.StatusCreated {
+			t.Errorf("se ha roto pollito got: %v\n want: %v", status, http.StatusCreated)
 		}
 	})
+
 	t.Run("should be return StatusBadRequest when the request it is wrong", func(t *testing.T) {
 		createMovieRequest := `{
 			"Name": "Peliculon",
