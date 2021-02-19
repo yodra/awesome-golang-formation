@@ -31,7 +31,13 @@ func CreateHandler(repository server.MovieRepo) HttpHandler {
 			return
 		}
 
-		movie := server.FormatToDomain(movieRequest)
+		movie, err:= server.NewMovie(movieRequest.Name, movieRequest.Year, movieRequest.Author)
+		if err != nil {
+			log.Printf("could not create the movie domain: %v", err)
+			http.Error(w, server.WriteErrorJSON(http.StatusExpectationFailed, err.Error()), http.StatusExpectationFailed)
+			return
+		}
+
 		err = repository.Save(ctx, movie)
 		if err != nil {
 			log.Printf("could not save the movie: %v", err)
