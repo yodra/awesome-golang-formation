@@ -15,6 +15,17 @@ type MovieRepo interface {
 	Save(ctx context.Context, movie Movie) error
 }
 
+func (m *Movie) Name() string {
+	return m.name.value
+}
+
+func (m *Movie) Year() string {
+	return m.year.value
+}
+
+func (m *Movie) Author() string {
+	return m.author.value
+}
 // todo add some custom data to specify the error? Something like "the filed name can..."
 var ErrEmptyField = errors.New("the field can not be empty")
 
