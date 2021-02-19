@@ -8,9 +8,9 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
-	"github.com/yodra/awesome-golang-formation/server/handler/hello"
-	"github.com/yodra/awesome-golang-formation/server/handler/movies"
-	"github.com/yodra/awesome-golang-formation/server/storage/mysql"
+	"github.com/yodra/awesome-golang-formation/pkg/server/handler/hello"
+	"github.com/yodra/awesome-golang-formation/pkg/server/handler/movies"
+	"github.com/yodra/awesome-golang-formation/pkg/storage/mysql"
 )
 
 const (

@@ -3,16 +3,17 @@ package movies
 import (
 	"context"
 	"encoding/json"
+	"github.com/yodra/awesome-golang-formation/pkg/domain"
 	"io/ioutil"
 	"log"
 	"net/http"
 
-	"github.com/yodra/awesome-golang-formation/server"
+	"github.com/yodra/awesome-golang-formation/pkg/server"
 )
 
 type HttpHandler func(w http.ResponseWriter, _ *http.Request)
 
-func CreateHandler(repository server.MovieRepo) HttpHandler {
+func CreateHandler(repository domain.MovieRepo) HttpHandler {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
@@ -31,7 +32,7 @@ func CreateHandler(repository server.MovieRepo) HttpHandler {
 			return
 		}
 
-		movie, err:= server.NewMovie(movieRequest.Name, movieRequest.Year, movieRequest.Author)
+		movie, err:= domain.NewMovie(movieRequest.Name, movieRequest.Year, movieRequest.Author)
 		if err != nil {
 			log.Printf("could not create the movie domain: %v", err)
 			http.Error(w, server.WriteErrorJSON(http.StatusExpectationFailed, err.Error()), http.StatusExpectationFailed)

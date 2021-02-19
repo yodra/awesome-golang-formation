@@ -4,13 +4,13 @@ import (
 	"context"
 	"errors"
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/yodra/awesome-golang-formation/server"
+	"github.com/yodra/awesome-golang-formation/pkg/domain"
 	"testing"
 )
 
 func Test_Save_RepositoryError(t *testing.T) {
 	name, year, author := "Movie name", "2002", "Movie author"
-	movie, err := server.NewMovie(name, year, author)
+	movie, err := domain.NewMovie(name, year, author)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,7 +32,7 @@ func Test_Save_RepositoryError(t *testing.T) {
 
 func Test_Save_Succeed(t *testing.T) {
 	name, year, author := "Movie name", "2002", "Movie author"
-	movie, err := server.NewMovie(name, year, author)
+	movie, err := domain.NewMovie(name, year, author)
 	if err != nil {
 		t.Fatal(err)
 	}

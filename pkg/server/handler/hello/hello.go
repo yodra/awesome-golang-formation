@@ -1,7 +1,7 @@
 package hello
 
 import (
-	"github.com/yodra/awesome-golang-formation/server"
+	"github.com/yodra/awesome-golang-formation/pkg/server"
 	"net/http"
 )
 

@@ -4,14 +4,14 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/yodra/awesome-golang-formation/server"
+	"github.com/yodra/awesome-golang-formation/pkg/domain"
 )
 
 type MovieRepository struct {
 	db *sql.DB
 }
 
-func (repo MovieRepository) Save(ctx context.Context, movie server.Movie) error {
+func (repo MovieRepository) Save(ctx context.Context, movie domain.Movie) error {
 	insert, err := repo.db.Prepare("INSERT INTO movies (name, year,author) VALUES (?,?,?)")
 	if err != nil {
 		return err
