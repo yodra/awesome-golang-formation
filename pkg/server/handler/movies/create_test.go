@@ -3,6 +3,7 @@ package movies
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/yodra/awesome-golang-formation/pkg/server/handler"
 	"net/http"
@@ -40,10 +41,9 @@ func TestCreateHandler(t *testing.T) {
 
 		recorder := httptest.NewRecorder()
 		r.ServeHTTP(recorder, req)
+		result := recorder.Result()
 
-		if status := recorder.Code; status != http.StatusCreated {
-			t.Errorf("se ha roto pollito got: %v\n want: %v", status, http.StatusCreated)
-		}
+		assert.Equal(t, http.StatusCreated, result.StatusCode)
 	})
 
 	t.Run("should be return StatusBadRequest when the request it is wrong", func(t *testing.T) {
@@ -57,9 +57,8 @@ func TestCreateHandler(t *testing.T) {
 
 		recorder := httptest.NewRecorder()
 		r.ServeHTTP(recorder, req)
+		result := recorder.Result()
 
-		if status := recorder.Code; status != http.StatusBadRequest {
-			t.Errorf("error got: %v\n want: %v", status, http.StatusBadRequest)
-		}
+		assert.Equal(t, http.StatusBadRequest, result.StatusCode)
 	})
 }
